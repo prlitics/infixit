@@ -1,2 +1,6 @@
 ^infixit\.Rproj$
 ^\.Rproj\.user$
+^\.github$
+^LICENSE\.md$
+^codecov\.yml$
+^\.covrignore
