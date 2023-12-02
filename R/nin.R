@@ -32,6 +32,7 @@
 #' 
 #' }
 `%nin%` <- function(lhs, rhs) {
+  
   results <- match(lhs, rhs, nomatch = 0) == 0
 
   return(results)
