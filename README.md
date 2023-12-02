@@ -23,6 +23,13 @@ manipulation tasks. Additionally, the specific behaviors of many of
 these operators are (to an extent) customizable using some of the
 package’s `options()`.
 
+It can be downloaded through the following:
+
+``` r
+library(remotes)
+install_github("prlitics/infixit")
+```
+
 There are currently 3 infix functions packaged with `{infixit}`:
 
 1.  `%+%`: Providing string concatenation.

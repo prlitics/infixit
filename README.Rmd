@@ -25,6 +25,13 @@ options(infixit.btwn = c("[","]"))
 
 `{infixit}` is an R package that looks to extend the available infix operators in R with some that are helpful for programming and data manipulation tasks. Additionally, the specific behaviors of many of these operators are (to an extent) customizable using some of the package's `options()`.
 
+It can be downloaded through the following:
+
+```{r install, eval=FALSE}
+library(remotes)
+install_github("prlitics/infixit")
+```
+
 There are currently 3 infix functions packaged with `{infixit}`:
 
 1. `%+%`: Providing string concatenation. 
