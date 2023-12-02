@@ -1,12 +1,22 @@
 Package: infixit
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Helpful Extra Infix Functions for R
+Version: 0.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Peter", "Licari", , "prlicari13@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0001-9701-6006"))
+Description: Infix functions in R are those that comes between its
+  arguments such as `%in%`, `+`, and `*`. These are useful in R 
+  programmin when manipulating data, performing logical operations, 
+  and making new functions. 'infixit' extends the infix functions 
+  found in 'R' to simplify frequent tasks, such as finding elements
+  that are NOT in a set, in-line text concatenation, and identifying
+  if a number lies between two others.
+License: MIT + file LICENSE
+URL: https://github.com/prlitics/infixit
+BugReports: https://github.com/prlitics/infixit/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
