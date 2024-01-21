@@ -5,7 +5,11 @@
 #' return an error when used with strings. `%+%` ports this
 #' capability over. By default, it uses `paste0` under the
 #' hood, but this can be shifted to `paste` by running
-#' `options(infixit.paste = "paste0")`.
+#' `options(infixit.paste = "paste0")`. By default (as with
+#' `paste`), this will have the seperator be a single space 
+#' (`" "`) between the pasted objects. This behavior can be
+#' changed with the `infixit.paste_sep` option. E.g.,
+#' `options(infixit.paste_sep = "|")`
 #'
 #' @param lhs The left-hand side.
 #' @param rhs The right-hand side.
@@ -24,12 +28,12 @@
     stop("options(\"infixit.paste\") can only use \"paste\" or \"paste0\".")
   }
 
-  if (options("infixit.paste") == "paste0") {
-    p <- paste0
+  if (getOption("infixit.paste") == "paste0") {
+    p <- paste0(lhs, rhs)
   } else {
-    p <- paste
+    p <- paste(lhs, rhs, sep = getOption("infixit.paste_sep"))
   }
 
-
-  p(lhs, rhs)
+  return(p)
+  
 }

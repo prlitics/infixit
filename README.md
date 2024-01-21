@@ -77,6 +77,23 @@ a %+% b %+% c
 
     ## [1] "Hello world! Let's do our best!"
 
+In cases where the user wants to use a different separator when using
+`"paste"` rather than the default `" "`, they can specify this using the
+`infixit.paste_sep` option. In the example below, this is done to change
+the delimiter to be a vertical pipe (“\|”):
+
+``` r
+options(infixit.paste_sep = "|") #default is paste0
+
+a <- "Hello" 
+b <- "world!"
+c <- "Let's do our best!"
+
+a %+% b %+% c
+```
+
+    ## [1] "Hello|world!|Let's do our best!"
+
 ### `%nin%` (Not in)
 
 Normally, you can use `%in%` to check if your left-hand-side element is
