@@ -163,14 +163,35 @@ a long list of things that a value could be `%in%`.
 
 Use `%btwn%` to determine whether values on the left-hand-side are
 within the bounds defined on the right-hand-side. `%btwn%` can
-accomodate both integer and double types; basically anything that can be
-coerced to a numeric value.
+accomodate integer, double numeric-types as well as strings that can be
+coerced into a date or POSIXlt object: basically anything that, at the
+end of the day, can be coerced to a numeric value.
 
 ``` r
 c(1,2,3.5,4.2,5,6) %btwn% c(2,4)
 ```
 
     ## [1] FALSE  TRUE  TRUE FALSE FALSE FALSE
+
+``` r
+dates_seq <- seq(as.Date("2020-01-01"),as.Date("2021-03-31"), by = "month")
+
+dates_seq %btwn% c("2019-12-31","2021-01-01")
+```
+
+    ##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+    ## [13]  TRUE FALSE FALSE
+
+You can pass unique datetime formats for the comparison set via the
+“infixit.btwn.datetimefmt” option.
+
+``` r
+options(infixit.btwn.datetimefmt = "%b %d, %Y")
+dates_seq %btwn% c("Dec 31, 2019", "Jan 01, 2021")
+```
+
+    ##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+    ## [13]  TRUE FALSE FALSE
 
 By default, the bounds on the right-hand-side are considered
 ***inclusive***, meaning that if a left-hand-side value matches one of

@@ -4,3 +4,4 @@
 ^LICENSE\.md$
 ^codecov\.yml$
 ^\.covrignore
+^README\.Rmd$

@@ -130,14 +130,27 @@ Now the data are only limited to "Dream" island. Though a relatively simple exam
 
 ### `%btwn%` (Whether a numeric value is between two others)
 
-Use `%btwn%` to determine whether values on the left-hand-side are within the bounds defined on the right-hand-side. `%btwn%` can accomodate both integer and double types; basically anything that can be coerced to a numeric value.
+Use `%btwn%` to determine whether values on the left-hand-side are within the bounds defined on the right-hand-side. `%btwn%` can accomodate integer, double numeric-types as well as strings that can be coerced into a date or POSIXlt object: basically anything that, at the end of the day, can be coerced to a numeric value.
 
 ```{r btwn}
 
 c(1,2,3.5,4.2,5,6) %btwn% c(2,4)
 
+dates_seq <- seq(as.Date("2020-01-01"),as.Date("2021-03-31"), by = "month")
+
+dates_seq %btwn% c("2019-12-31","2021-01-01")
 
 ```
+
+You can pass unique datetime formats for the comparison set via the "infixit.btwn.datetimefmt" option.
+
+```{r btwn_dates}
+options(infixit.btwn.datetimefmt = "%b %d, %Y")
+dates_seq %btwn% c("Dec 31, 2019", "Jan 01, 2021")
+
+```
+
+
 By default, the bounds on the right-hand-side are considered **_inclusive_**, meaning that if a left-hand-side value matches one of the two bounds, it will return as `TRUE`. In mathematics, inclusivity can be denoted with square brackets "[" or "]". It is possible to change the behavior such that the values are **exclusive**, meaning that an exact match for the specified boundary value will return as `FALSE`.
 
 The "infixit.btwn" option that is loaded with the package allows users to define whether the lower boundary is (in/ex)clusive and/or whether the upper boundary is (in/ex)clusive.
