@@ -91,8 +91,7 @@
   ret_vec <- switch (
     type,
     datetime = as.numeric(as.POSIXlt(
-      vec, tryFormats = c(getOption("infixit.btwn.datefmt"), 
-                          getOption("infixit.btwn.datetimefmt"))
+      vec, tryFormats = c(getOption("infixit.btwn.datetimefmt"))
     )),
     number = vec
   )
