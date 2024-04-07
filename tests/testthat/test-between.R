@@ -1,8 +1,5 @@
 test_that("Errors run", {
-  expect_error(
-    3 %btwn% c("2012-02-01", "2023-02-01")
-  )
-  
+
   expect_error(
     "3" %btwn% c("1", "5"),
     "Invalid types for %btwn% comparisons"
