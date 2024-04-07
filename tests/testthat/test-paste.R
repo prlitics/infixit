@@ -1,6 +1,6 @@
 test_that("Pastes strings", {
   options(infixit.paste = "paste0")
-
+  options(infixit.paste_sep = " ")
   expectation1 <- "Alexis Licari"
   
   expectation2 <- "Alexis|Licari"

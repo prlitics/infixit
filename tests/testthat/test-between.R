@@ -83,7 +83,7 @@ test_that("Inclusive behavior works", {
 
 test_that("Date and Datetime errors catch",{
   
-  expect_error("Apr 15, 1994" %btwn% c("1951-05-28","2024-01-01") ,
+  expect_error("Apr151994" %btwn% c("1951-05-28","2024-01-01") ,
                "Invalid types for %btwn% comparisons!")
   
   
