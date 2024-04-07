@@ -33,20 +33,27 @@
 #' }
 #'
 `%btwn%` <- function(lhs, rhs) {
-  if (!is.numeric(rhs) || (length(rhs) != 2)) {
-    stop("Comparison must only be made of numeric vector of length 2.")
+  
+  if ((length(rhs) != 2)) {
+    
+    stop("Comparison must only be made of a numeric or datetime vector of length 2.")
+    
   }
+  
 
   if (any(is.na(rhs))) {
     stop("Comparative range must not include an NA.")
   }
 
+
+  same_types <- .check_btwn_lhs_rhs_same_accepted_type(lhs, rhs)
+  lhs <- .btwn_convert(lhs, same_types)
+  rhs <- .btwn_convert(rhs, same_types)
+  
+  
   if (rhs[[1]] > rhs[[2]]) {
     stop("Elements of comparative range must be arranged c(lower_number, larger_number)")
   }
-
-
-
 
   ops <- options("infixit.btwn")[[1]]
 
@@ -73,3 +80,117 @@
 
   return(result)
 }
+
+
+
+# Converts vectors into a numeric type. Returns 
+# original vector when it's numeric but converts to
+# numeric so as to perform a between operation
+
+.btwn_convert <- function(vec, type) {
+  ret_vec <- switch (
+    type,
+    datetime = as.numeric(as.POSIXlt(
+      vec, tryFormats = c(getOption("infixit.btwn.datetimefmt"))
+    )),
+    number = vec
+  )
+  
+  if (!is.null(ret_vec)) {
+    return(ret_vec)
+    
+  } else{
+    stop(
+      "Error in parsing vector types. Must be a numeric or a date matching the formats in getOption(\"infixit.btwn.datefmt\") or getOption(\"infixit.btwn.datetimefmt\")"
+    )
+    
+  }
+  
+  
+  
+}
+
+
+
+.check_btwn_lhs_rhs_same_accepted_type <- function(lhs, rhs) {
+  
+  lhs_numeric <- is.numeric(lhs)
+  rhs_numeric <- is.numeric(rhs)
+  
+  if (lhs_numeric && rhs_numeric) {
+    return("number")
+    
+  } else {
+    lhs_datetype <-
+      .check_btwn_vec_is_date(lhs, c(
+        getOption("infixit.btwn.datetimefmt")
+      ))
+    
+    
+    rhs_datetype <-
+      .check_btwn_vec_is_date(rhs, c(
+        getOption("infixit.btwn.datetimefmt")
+      ))
+    
+    if ( (isFALSE(lhs_numeric) & isFALSE(lhs_datetype)) | (isFALSE(rhs_numeric) & isFALSE(rhs_datetype))){
+      
+      
+      stop("Invalid types for %btwn% comparisons! left-hand-side and right-hand-side must either be numeric or date strings matching the formats in  getOption(\"infixit.btwn.datefmt\") or getOption(\"infixit.btwn.datetimefmt\")")
+      
+      
+    }
+    
+    
+    
+    if ((lhs_datetype == rhs_datetype) && !isFALSE(lhs_datetype)) {
+      
+      return(lhs_datetype)
+      
+      
+    } else if ((lhs_datetype != rhs_datetype) | (lhs_numeric != rhs_numeric) )  {
+      
+      stop(
+        "left-hand-side and right-hand-side are not of the same type! Ensure they are of the same type before using %btwn%. \nAccepted types are numeric and date strings matching the formats in  getOption(\"infixit.btwn.datefmt\") or getOption(\"infixit.btwn.datetimefmt\")"
+      )
+      
+      
+    } else {
+      
+      stop(
+        "Invalid types for %btwn% comparisons! left-hand-side and right-hand-side must either be numeric or date strings matching the formats in  getOption(\"infixit.btwn.datefmt\") or getOption(\"infixit.btwn.datetimefmt\")"
+      )
+      
+      
+    }
+    
+    
+    
+  }
+  
+  
+}
+
+
+
+.check_btwn_vec_is_date <- function(vec, formats){
+  
+
+  try_datetime <- tryCatch(
+    as.POSIXlt(vec, tryFormats = formats),
+    error = function(e) {
+      return(NA)
+    })
+  
+  if (all(is.na(try_datetime))){
+    
+    return(FALSE)
+    
+  } else {
+      
+      return("datetime")
+      
+    }
+    
+  
+}
+

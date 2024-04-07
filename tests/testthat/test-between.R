@@ -1,17 +1,19 @@
 test_that("Errors run", {
+
   expect_error(
-    3 %btwn% c("1", 5),
-    "Comparison must only be made of numeric"
+    "3" %btwn% c("1", "5"),
+    "Invalid types for %btwn% comparisons"
   )
+  
 
   expect_error(
     3 %btwn% c(TRUE, FALSE),
-    "Comparison must only be made of numeric"
+    "Invalid types for %btwn% comparisons!"
   )
 
   expect_error(
     3 %btwn% c(1, 5, 6),
-    "Comparison must only be made of numeric"
+    "Comparison must only be made of a numeric"
   )
 
   expect_error(
@@ -74,6 +76,61 @@ test_that("Inclusive behavior works", {
 
   options(infixit.btwn = c("[", "]"))
 })
+
+test_that("Date and Datetime errors catch",{
+  
+  expect_error("Apr151994" %btwn% c("1951-05-28","2024-01-01") ,
+               "Invalid types for %btwn% comparisons!")
+  
+  
+  expect_error("1994-05-11" %btwn% c("1951-05-28","Jan 1 2024") ,
+               "Invalid types for %btwn% comparisons!")
+  
+  
+  
+  expect_error("1994-05-11" %btwn% c("May 28 1951","Jan 1 2024") ,
+               "Invalid types for %btwn% comparisons!")
+  
+  
+})
+
+
+test_that("Date and Datetime works",{
+  
+  expect_true("1994-05-11" %btwn% c("1994-04-15","2024-04-15"))
+
+  expect_true(all(c("1994-05-11","2020-03-13") %btwn% c("1994-04-15","2024-04-15")))
+  
+  test_vec1 <- c("1994-05-11","2020-03-13", "1966-10-30") %btwn% c("1994-04-15","2024-04-15")
+  expect_vec1 <- c(TRUE,TRUE,FALSE)
+  
+  expect_equal(test_vec1, expect_vec1)
+  
+  expect_true(all(c("1994-05-11 23:59","2020-03-13") %btwn% c("1994-04-15","2024-04-15")))
+
+  options(infixit.btwn.datetimefmt = "%b %d, %Y")
+  
+  expect_true(all(c("May 11, 1994","Mar 13, 2020") %btwn% c("Apr 15, 1994","Apr 15, 2024")))
+  
+  
+  
+  test_vec2 <- c("May 11, 1994","Mar 13, 2020", "Oct 30, 1966") %btwn% c("Apr 15, 1994","Apr 15, 2024")
+  expect_vec2 <- c(TRUE,TRUE,FALSE)
+  expect_equal(test_vec2, expect_vec2)
+  
+  
+  
+  options(infixit.btwn.datetimefmt = c("%b %d, %Y", "%Y-%m-%d"))
+  
+  expect_true(all(c("May 11, 1994","Mar 13, 2020") %btwn% c("1994-04-15","2024-04-15")))
+  
+  test_vec3 <- c("May 11, 1994","Mar 13, 2020", "Oct 30, 1966") %btwn% c("1994-04-15","2024-04-15")
+  expect_vec3 <- c(TRUE,TRUE,FALSE)
+  expect_equal(test_vec3, expect_vec3)
+  
+  
+})
+
 
 
 test_that("Different number types work", {

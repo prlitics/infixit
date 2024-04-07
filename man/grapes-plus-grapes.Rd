@@ -20,7 +20,11 @@ concatenating strings. In standard R, however, \code{+} will
 return an error when used with strings. \verb{\%+\%} ports this
 capability over. By default, it uses \code{paste0} under the
 hood, but this can be shifted to \code{paste} by running
-\code{options(infixit.paste = "paste0")}.
+\code{options(infixit.paste = "paste0")}. By default (as with
+\code{paste}), this will have the seperator be a single space
+(\code{" "}) between the pasted objects. This behavior can be
+changed with the \code{infixit.paste_sep} option. E.g.,
+\code{options(infixit.paste_sep = "|")}
 }
 \examples{
 {

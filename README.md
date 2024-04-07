@@ -30,13 +30,29 @@ library(remotes)
 install_github("prlitics/infixit")
 ```
 
-There are currently 3 infix functions packaged with `{infixit}`:
+There are currently 8 infix functions packaged with `{infixit}`:
 
 1.  `%+%`: Providing string concatenation.
 2.  `%nin%`: Providing the inverse of the `%in%` function (e.g., whether
     an element of $X$ *is **not*** in $Y$).
-3.  `%btwn%`: Lets users determine if numeric elements of $X$ are
-    **b**e**tw**ee**n** values $Y_1$ and $Y_2$.
+3.  `%btwn%`: Lets users determine if numeric elements (including date
+    objects) of $X$ are **b**e**tw**ee**n** values $Y_1$ and $Y_2$.
+4.  Five augmented assignment operations which take the left-hand object
+    and reassigns its value based off the right-hand value. For example,
+    let’s say we have an object `apple` with a value of 12.
+    `apple %+=% 1` takes the current value of `apple`, adds 1 to it
+    (12 + 1 = 13), and then updates the value of `apple` to this sum.
+    The five operations are:
+    - `%+=%`: Updates left-hand object by *adding* it to the right-hand
+      object.
+    - `%-=%`: Updates left-hand object by *subtracting* it from the
+      right-hand object.
+    - `%/=%`: Updates left-hand object by *dividing* it by the
+      right-hand object.
+    - `%*=%`: Updates left-hand object by *multiplying* it by the
+      right-hand object.
+    - `%^=%`: Updates left-hand object by *exponentiating* it by the
+      right-hand object.
 
 While there are ways to achieve the end-behaviors of these functions,
 the intent is to do so in a way that maximizes the ease of coders and
@@ -76,6 +92,23 @@ a %+% b %+% c
 ```
 
     ## [1] "Hello world! Let's do our best!"
+
+In cases where the user wants to use a different separator when using
+`"paste"` rather than the default `" "`, they can specify this using the
+`infixit.paste_sep` option. In the example below, this is done to change
+the delimiter to be a vertical pipe (“\|”):
+
+``` r
+options(infixit.paste_sep = "|") #default is paste0
+
+a <- "Hello" 
+b <- "world!"
+c <- "Let's do our best!"
+
+a %+% b %+% c
+```
+
+    ## [1] "Hello|world!|Let's do our best!"
 
 ### `%nin%` (Not in)
 
@@ -121,11 +154,6 @@ package. You are only interested in penguins that are not from either
 
 ``` r
 suppressPackageStartupMessages(library(palmerpenguins))
-```
-
-    ## Warning: package 'palmerpenguins' was built under R version 4.2.3
-
-``` r
 suppressPackageStartupMessages(library(dplyr))
 
 penguins %>%
@@ -146,14 +174,35 @@ a long list of things that a value could be `%in%`.
 
 Use `%btwn%` to determine whether values on the left-hand-side are
 within the bounds defined on the right-hand-side. `%btwn%` can
-accomodate both integer and double types; basically anything that can be
-coerced to a numeric value.
+accomodate integer, double numeric-types as well as strings that can be
+coerced into a date or POSIXlt object: basically anything that, at the
+end of the day, can be coerced to a numeric value.
 
 ``` r
 c(1,2,3.5,4.2,5,6) %btwn% c(2,4)
 ```
 
     ## [1] FALSE  TRUE  TRUE FALSE FALSE FALSE
+
+``` r
+dates_seq <- seq(as.Date("2020-01-01"),as.Date("2021-03-31"), by = "month")
+
+dates_seq %btwn% c("2019-12-31","2021-01-01")
+```
+
+    ##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+    ## [13]  TRUE FALSE FALSE
+
+You can pass unique datetime formats for the comparison set via the
+“infixit.btwn.datetimefmt” option.
+
+``` r
+options(infixit.btwn.datetimefmt = "%b %d, %Y")
+dates_seq %btwn% c("Dec 31, 2019", "Jan 01, 2021")
+```
+
+    ##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+    ## [13]  TRUE FALSE FALSE
 
 By default, the bounds on the right-hand-side are considered
 ***inclusive***, meaning that if a left-hand-side value matches one of
@@ -261,3 +310,62 @@ penguins %>%
     ## 4          NA          NA
     ## 5        3450           1
     ## 6        3650           2
+
+### Augmented arithmetic reasignment (`%+=%` and kin)
+
+In languages such as Python, it is possible to take an object with a
+numeric value and update/reassign it with a single operation. So, for
+example, if I had `test = 5`, I could do `test += 5` and then my new
+value of `test` would be 10. This sort of behavior is called “augmented
+assignment”, and it can be very useful when doing things in loops.
+
+In R, you currently would have to reassign the value like this:
+`test <- test + 5`. Some programmers find this to be more verbose than
+it needs to be. So, for example:
+
+``` r
+v1 <- 0
+v2 <- 0
+
+for (i in 1:5) {
+  
+  v1 <- v1 + i
+  v2 %+=% i
+  
+  print("v1 is " %+% v1 %+% " and v2 is " %+% v2)
+  
+}
+```
+
+    ## [1] "v1 is 1 and v2 is 1"
+    ## [1] "v1 is 3 and v2 is 3"
+    ## [1] "v1 is 6 and v2 is 6"
+    ## [1] "v1 is 10 and v2 is 10"
+    ## [1] "v1 is 15 and v2 is 15"
+
+``` r
+identical(v1, v2)
+```
+
+    ## [1] TRUE
+
+This functionality offers some fun and interesting possibilities for
+updating vectors as well:
+
+``` r
+v1 <- 1:5
+
+v1 %*=% 2
+
+print(v1)
+```
+
+    ## [1]  2  4  6  8 10
+
+``` r
+v1 %-=% 1:5
+
+print(v1)
+```
+
+    ## [1] 1 2 3 4 5

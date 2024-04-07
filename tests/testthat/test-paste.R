@@ -1,7 +1,9 @@
 test_that("Pastes strings", {
   options(infixit.paste = "paste0")
-
-  expectation <- "Alexis Licari"
+  options(infixit.paste_sep = " ")
+  expectation1 <- "Alexis Licari"
+  
+  expectation2 <- "Alexis|Licari"
 
   test_1 <- "Alexis " %+% "Licari"
 
@@ -9,15 +11,21 @@ test_that("Pastes strings", {
 
   test_3 <- paste0("Alexis ", "Licari")
 
-  expect_equal(test_1, expectation)
+  expect_equal(test_1, expectation1)
 
-  expect_equal(test_2, expectation)
+  expect_equal(test_2, expectation1)
 
   options(infixit.paste = "paste")
 
   test_3 <- "Alexis" %+% "Licari"
 
-  expect_equal(test_3, expectation)
+  expect_equal(test_3, expectation1)
+  
+  options(infixit.paste_sep = "|")
+  
+  test_4 <- "Alexis" %+% "Licari"
+  
+  expect_equal(test_4, expectation2)
 })
 
 

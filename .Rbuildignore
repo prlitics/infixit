@@ -4,3 +4,5 @@
 ^LICENSE\.md$
 ^codecov\.yml$
 ^\.covrignore
+^README\.Rmd$
+^cran-comments\.md$
