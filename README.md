@@ -30,13 +30,29 @@ library(remotes)
 install_github("prlitics/infixit")
 ```
 
-There are currently 3 infix functions packaged with `{infixit}`:
+There are currently 8 infix functions packaged with `{infixit}`:
 
 1.  `%+%`: Providing string concatenation.
 2.  `%nin%`: Providing the inverse of the `%in%` function (e.g., whether
     an element of $X$ *is **not*** in $Y$).
-3.  `%btwn%`: Lets users determine if numeric elements of $X$ are
-    **b**e**tw**ee**n** values $Y_1$ and $Y_2$.
+3.  `%btwn%`: Lets users determine if numeric elements (including date
+    objects) of $X$ are **b**e**tw**ee**n** values $Y_1$ and $Y_2$.
+4.  Five augmented assignment operations which take the left-hand object
+    and reassigns its value based off the right-hand value. For example,
+    let’s say we have an object `apple` with a value of 12.
+    `apple %+=% 1` takes the current value of `apple`, adds 1 to it
+    (12 + 1 = 13), and then updates the value of `apple` to this sum.
+    The five operations are:
+    - `%+=%`: Updates left-hand object by *adding* it to the right-hand
+      object.
+    - `%-=%`: Updates left-hand object by *subtracting* it from the
+      right-hand object.
+    - `%/=%`: Updates left-hand object by *dividing* it by the
+      right-hand object.
+    - `%*=%`: Updates left-hand object by *multiplying* it by the
+      right-hand object.
+    - `%^=%`: Updates left-hand object by *exponentiating* it by the
+      right-hand object.
 
 While there are ways to achieve the end-behaviors of these functions,
 the intent is to do so in a way that maximizes the ease of coders and
@@ -138,11 +154,6 @@ package. You are only interested in penguins that are not from either
 
 ``` r
 suppressPackageStartupMessages(library(palmerpenguins))
-```
-
-    ## Warning: package 'palmerpenguins' was built under R version 4.2.3
-
-``` r
 suppressPackageStartupMessages(library(dplyr))
 
 penguins %>%
@@ -299,3 +310,62 @@ penguins %>%
     ## 4          NA          NA
     ## 5        3450           1
     ## 6        3650           2
+
+### Augmented arithmetic reasignment (`%+=%` and kin)
+
+In languages such as Python, it is possible to take an object with a
+numeric value and update/reassign it with a single operation. So, for
+example, if I had `test = 5`, I could do `test += 5` and then my new
+value of `test` would be 10. This sort of behavior is called “augmented
+assignment”, and it can be very useful when doing things in loops.
+
+In R, you currently would have to reassign the value like this:
+`test <- test + 5`. Some programmers find this to be more verbose than
+it needs to be. So, for example:
+
+``` r
+v1 <- 0
+v2 <- 0
+
+for (i in 1:5) {
+  
+  v1 <- v1 + i
+  v2 %+=% i
+  
+  print("v1 is " %+% v1 %+% " and v2 is " %+% v2)
+  
+}
+```
+
+    ## [1] "v1 is 1 and v2 is 1"
+    ## [1] "v1 is 3 and v2 is 3"
+    ## [1] "v1 is 6 and v2 is 6"
+    ## [1] "v1 is 10 and v2 is 10"
+    ## [1] "v1 is 15 and v2 is 15"
+
+``` r
+identical(v1, v2)
+```
+
+    ## [1] TRUE
+
+This functionality offers some fun and interesting possibilities for
+updating vectors as well:
+
+``` r
+v1 <- 1:5
+
+v1 %*=% 2
+
+print(v1)
+```
+
+    ## [1]  2  4  6  8 10
+
+``` r
+v1 %-=% 1:5
+
+print(v1)
+```
+
+    ## [1] 1 2 3 4 5
