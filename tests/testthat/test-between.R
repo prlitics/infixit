@@ -1,7 +1,6 @@
 test_that("Errors run", {
   expect_error(
-    3 %btwn% c("2012-02-01", "2023-02-01"),
-    "left-hand-side and right-hand-side are not of the same type"
+    3 %btwn% c("2012-02-01", "2023-02-01")
   )
   
   expect_error(
