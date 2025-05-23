@@ -64,8 +64,8 @@ There are currently 12 infix functions packaged with `{infixit}`:
     - `NULL`
     - A vector where all values are `NA` or single `NA` value
 7.  Two extended logical comparisons:
-    - `%!&%` implementing NAND (with `%nand%` as an alias)
-    - `%x|` implementing XOR (exclusive or; with `%xor%` as an alias)
+    - `%nand%` implementing NAND.
+    - `%xor%` implementing XOR.
 
 While there are ways to achieve the end-behaviors of these functions,
 the intent is to do so in a way that maximizes the ease of coders and
@@ -515,20 +515,14 @@ are all implemented in base R (and, really, in any sane programming
 language). However, there are particular combinations of these elements
 that are particularly prominent and useful. Chief among these are NAND
 (Not AND) and XOR (eXclusive OR). Not AND, as its name implies, returns
-the inverse of AND. Infixit supplies `%!&%` for this purpose—as well as
-`%nand%` as an alias.
+the inverse of AND. Infixit supplies`%nand%` for this purpose as an
+alias.
 
 ``` r
-TRUE %!&% TRUE
+TRUE %nand% TRUE
 ```
 
     ## [1] FALSE
-
-``` r
-TRUE %!&% FALSE
-```
-
-    ## [1] TRUE
 
 ``` r
 TRUE %nand% FALSE
@@ -537,29 +531,29 @@ TRUE %nand% FALSE
     ## [1] TRUE
 
 XOR returns `TRUE` only when *one* of the sides in an OR operation is
-True. Whereas the standard OR would return `TRUE` if both sides are
-True, `%x|%` (or `%xor%`) returns `FALSE`.
+True. Whereas the standard OR would return `TRUE` if both sides are True
+`%xor%` returns `FALSE`.
 
 ``` r
-TRUE %x|% TRUE
+TRUE %xor% TRUE
 ```
 
     ## [1] FALSE
 
 ``` r
-TRUE %x|% FALSE
+TRUE %xor% FALSE
 ```
 
     ## [1] TRUE
 
 ``` r
-FALSE %x|% TRUE
+FALSE %xor% TRUE
 ```
 
     ## [1] TRUE
 
 ``` r
-FALSE %x|% FALSE
+FALSE %xor% FALSE
 ```
 
     ## [1] FALSE

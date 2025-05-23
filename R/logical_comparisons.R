@@ -19,12 +19,12 @@
 #' side input.
 #' @export
 #' @examples {
-#'   TRUE %!&% TRUE # Evaluates to FALSE
-#'   FALSE %!&% TRUE # Evaluates to TRUE
-#'   FALSE %!&% FALSE # Evaluates to TRUE
+#'   TRUE %nand% TRUE # Evaluates to FALSE
+#'   FALSE %nand% TRUE # Evaluates to TRUE
+#'   FALSE %nand%FALSE # Evaluates to TRUE
 #' }
 
-`%!&%` <- function(lhs, rhs) {
+`%nand%` <- function(lhs, rhs) {
   return(!(rhs & lhs))
 }
 
@@ -53,26 +53,15 @@
 #' side input.
 #' @export
 #' @examples {
-#'   TRUE %x|% TRUE # Evaluates to FALSE
-#'   FALSE %x|% TRUE # Evaluates to TRUE
+#'   TRUE %xor% TRUE # Evaluates to FALSE
+#'   FALSE %xor% TRUE # Evaluates to TRUE
 #' }
 #'
 #'
 
-`%x|%`  <- function(lhs, rhs) {
+`%xor%` <- function(lhs, rhs) {
   return((lhs | rhs) & !(lhs & rhs))
 
   
   
 }
-
-
-#' @rdname grapes-x-or-grapes
-#' @aliases %x|%
-#' @export
-`%xor%` <- `%x|%`
-
-#' @rdname grapes-not-and-grapes
-#' @aliases %!&%
-#' @export
-`%nand%` <- `%!&%`
