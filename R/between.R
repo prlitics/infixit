@@ -84,7 +84,7 @@
   }
   
 
-  result <- unlist(lapply(lhs, \(x){
+  result <- unlist(lapply(lhs, function(x){
     lcomp(x, rhs[[1]]) && rcomp(x, rhs[[2]]) && na_funct(x)
   }))
 

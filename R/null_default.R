@@ -6,7 +6,7 @@
 #' the right-hand side. This is useful for programming
 #' to ensure a function or process returns a non-null
 #' default.
-#'
+#' @name null-default
 #' @param x The left-hand side, the value(s) to be evaluated
 #' as either NULL or not.
 #' @param y The right-hand side, the value(s) to be returned
@@ -57,6 +57,7 @@
 #'  currently defined in an environment accessible to the function
 #'  (e.g., in the global environment).
 #'
+#' @name extended-null-default
 #' @param lhs The left-hand side, the value(s) to be evaluated
 #' as.
 #' @param rhs The right-hand side, the value(s) to be returned

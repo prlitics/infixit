@@ -47,4 +47,4 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: false
-          build_args: 'c("--no-manual")'
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
