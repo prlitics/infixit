@@ -30,7 +30,7 @@ library(remotes)
 install_github("prlitics/infixit")
 ```
 
-There are currently 8 infix functions packaged with `{infixit}`:
+There are currently 12 infix functions packaged with `{infixit}`:
 
 1.  `%+%`: Providing string concatenation.
 2.  `%nin%`: Providing the inverse of the `%in%` function (e.g., whether
@@ -53,6 +53,19 @@ There are currently 8 infix functions packaged with `{infixit}`:
       right-hand object.
     - `%^=%`: Updates left-hand object by *exponentiating* it by the
       right-hand object.
+5.  `%||%`: Null-default operator; if left-hand value is `NULL` will
+    return the right-hand value (now in base starting in R 4.4, also
+    found in `{rlang}`)
+6.  `%|||%`: Extended-default operator: will return the right-hand value
+    if left-hand value is any of the following:
+    - A vector where all values are `FALSE`
+    - A single `FALSE` value
+    - An object of `length(0)` (e.g., `character(0)`)
+    - `NULL`
+    - A vector where all values are `NA` or single `NA` value
+7.  Two extended logical comparisons:
+    - `%nand%` implementing NAND.
+    - `%xor%` implementing XOR.
 
 While there are ways to achieve the end-behaviors of these functions,
 the intent is to do so in a way that maximizes the ease of coders and
@@ -243,6 +256,23 @@ c(1,2,3,4,5) %btwn% c(2,4)
 
     ## [1] FALSE FALSE  TRUE FALSE FALSE
 
+Additionally, users have the option to determine whether `NA` values are
+considered to be `%btwn%` their lhs and rhs variables. By default, the
+function returns `NA` but can be configured to return `FALSE`
+
+``` r
+c(NA, 1,2,3,4,5) %btwn% c(2,4) # Will return NA for the first item in the vector.
+```
+
+    ## [1]    NA FALSE FALSE  TRUE FALSE FALSE
+
+``` r
+options(infixit.btwn.ignore_na = FALSE)
+c(NA, 1,2,3,4,5) %btwn% c(2,4) # Will return FALSE for the first item in the vector.
+```
+
+    ## [1] FALSE FALSE FALSE  TRUE FALSE FALSE
+
 `%btwn%` can be especially helpful in the context of `{dplyr}`’s
 `case_when` function. Let’s imagine that we are trying to group penguins
 by body mass (chunk ’em by chonk, one might say). We want to put them
@@ -369,3 +399,167 @@ print(v1)
 ```
 
     ## [1] 1 2 3 4 5
+
+### Default Operators
+
+R 4.4 introduced the default `NULL` operator (`%||%`), which had
+previously been a part of the `{rlang}` package. `%||%` checks the
+left-hand side variable to check if it evaluates to `NULL` and, if so,
+returns the value of the right-hand side. If not `NULL`, it will return
+the left-hand side value. This can be helpful in programming when
+dealing with operations that only happen situationally (i.e., if certain
+parameters are passed, objects are of a particular class, etc). Infixit
+now includes `%||%`, but defaults to the base function if users are on
+4.4 or greater.
+
+``` r
+val1 <- NULL
+val1 %||% "apple" #returns "apple"
+```
+
+    ## [1] "apple"
+
+``` r
+val2 <- "banana"
+val2 %||% "apple" #returns "banana"
+```
+
+    ## [1] "banana"
+
+However, `NULL` are not the only way that programmers may indicate the
+absence of a value. Some may choose to do `NA`, `FALSE`, or an object of
+length 0. (The latter is can happen often, for example, when comparing
+sets of values to each other using set operations). To that end, infixit
+also introduces an *extended* default operator `%|||%` which checks for
+a larger array of possible “empty” values.
+
+``` r
+NULL %|||% "apple" #Null
+```
+
+    ## [1] "apple"
+
+``` r
+NA %|||% "apple" #Atomic NA
+```
+
+    ## [1] "apple"
+
+``` r
+c(NA, NA, NA, NA) %|||% "apple" #A vector solely comprised of NAs
+```
+
+    ## [1] "apple"
+
+``` r
+FALSE %|||% "apple" #Atomic False
+```
+
+    ## [1] "apple"
+
+``` r
+c(FALSE, FALSE, FALSE) %|||% "apple" #A vector solely comprised of False values
+```
+
+    ## [1] "apple"
+
+``` r
+character(0) %|||% "appple" #An object of length zero
+```
+
+    ## [1] "appple"
+
+``` r
+"banana" %|||% "apple"
+```
+
+    ## [1] "banana"
+
+Under the hood, `%|||%` is running a series of tests based upon function
+names. Some of these are provided by base R, others are provided by
+infixit. You can extend these tests based upon your own needs though
+`options("infixit.extended_default_tests")`
+
+``` r
+is_empty_string <- function(x) {ifelse(length(x) == 0 | x == "", TRUE, FALSE)}
+
+tests <- options("infixit.extended_default_tests")[[1]]
+tests <- c(tests, "is_empty_string")
+
+options(infixit.extended_default_tests = tests)
+
+"" %|||% "apple"
+```
+
+    ## [1] "apple"
+
+By default, `%|||%` returns the right-hand side exactly once. But if you
+have, say, a vector of `NA` or `FALSE` values, you may want it to return
+the right-hand side but with the same length as your left-hand side.
+This can be accomplished with
+`options("infixit.extended_default_length")`. By default it is set to
+`"one"` but can be set to `"match"` to match the length.
+
+``` r
+options(infixit.extended_default_length  = "match")
+
+c(NA,NA,NA,NA) %|||% "apple"
+```
+
+    ## [1] "apple" "apple" "apple" "apple"
+
+### Logical Operators
+
+The elemental operations for Boolean algebra are AND, OR, and NOT, which
+are all implemented in base R (and, really, in any sane programming
+language). However, there are particular combinations of these elements
+that are particularly prominent and useful. Chief among these are NAND
+(Not AND) and XOR (eXclusive OR). Not AND, as its name implies, returns
+the inverse of AND. Infixit supplies`%nand%` for this purpose as an
+alias.
+
+``` r
+TRUE %nand% TRUE
+```
+
+    ## [1] FALSE
+
+``` r
+TRUE %nand% FALSE
+```
+
+    ## [1] TRUE
+
+XOR returns `TRUE` only when *one* of the sides in an OR operation is
+True. Whereas the standard OR would return `TRUE` if both sides are True
+`%xor%` returns `FALSE`.
+
+``` r
+TRUE %xor% TRUE
+```
+
+    ## [1] FALSE
+
+``` r
+TRUE %xor% FALSE
+```
+
+    ## [1] TRUE
+
+``` r
+FALSE %xor% TRUE
+```
+
+    ## [1] TRUE
+
+``` r
+FALSE %xor% FALSE
+```
+
+    ## [1] FALSE
+
+``` r
+TRUE %xor% TRUE
+```
+
+    ## [1] FALSE

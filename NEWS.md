@@ -1,5 +1,17 @@
 # infixit
 
+## Version 0.3.0
+
+### Major changes
+* Added `%||%` null default operator to the package
+* Added `%|||% expended default operator to the package (for more than just non-null cases)
+* Added `%x|` (and %xor% as an alias) for XOR logical operations
+* Added `%!&` (and %nand% as an alias) for NAND logical operations
+
+### Minor changes
+* Added option for `%btwn%` for `NA` values to be considered `FALSE` when evaluated since, conceptually, an NA does not fall between any X,Y. Option is accessed via `infixit.btwn.ignore_na`
+
+
 ## Version 0.2.0
 
 ### Major changes

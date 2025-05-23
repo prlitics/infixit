@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples {
-#'   13 %btwn% c(12.5, 15)
+#'   13 %btwn% c(12.5, 15) #returns TRUE
 #' }
 #'
 `%btwn%` <- function(lhs, rhs) {
@@ -56,7 +56,7 @@
   }
 
   ops <- options("infixit.btwn")[[1]]
-
+  na_ops <- options('infixit.btwn.ignore_na')[[1]]
   if (ops[1] == "[") {
     lcomp <- `>=`
   } else if (ops[1] == "(") {
@@ -72,10 +72,20 @@
   } else {
     stop("Element 2 of options(infixit.btwn) must either be \"]\" or \")\"")
   }
+  
+  if (na_ops){
+    
+    na_funct <- function(x){ return(TRUE) }
+    
+  } else {
+    
+    na_funct <- function(x){ return(!is.na(x))}
+    
+  }
+  
 
-
-  result <- unlist(lapply(lhs, \(x){
-    lcomp(x, rhs[[1]]) && rcomp(x, rhs[[2]])
+  result <- unlist(lapply(lhs, function(x){
+    lcomp(x, rhs[[1]]) && rcomp(x, rhs[[2]]) && na_funct(x)
   }))
 
   return(result)

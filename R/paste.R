@@ -24,7 +24,7 @@
 #' "This is a sentence. " %+% b
 #' }
 `%+%` <- function(lhs, rhs) {
-  if (!(options("infixit.paste") %in% c("paste", "paste0"))) {
+  if ((options("infixit.paste") %nin% c("paste", "paste0"))) {
     stop("options(\"infixit.paste\") can only use \"paste\" or \"paste0\".")
   }
 
