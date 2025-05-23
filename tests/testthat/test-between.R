@@ -187,3 +187,30 @@ test_that("Multiple Lengths", {
 
   expect_identical(test_1, expectation)
 })
+
+
+
+
+
+test_that("NA functionality works", { 
+  
+  options(infixit.btwn.ignore_na = TRUE)
+  
+  expectation <- c(NA, rep(FALSE, 2), rep(TRUE, 5), rep(FALSE, 2))
+  
+  test_1 <- c(NA,1:9) %btwn% c(3, 7)
+  
+  expect_identical(test_1, expectation)
+  
+  options(infixit.btwn.ignore_na = FALSE)
+  
+  expectation <- c(FALSE, rep(FALSE, 2), rep(TRUE, 5), rep(FALSE, 2))
+  
+  test_2 <- c(NA,1:9) %btwn% c(3, 7)
+  
+  expect_identical(test_2, expectation)
+  
+
+  })
+
+

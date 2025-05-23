@@ -40,7 +40,7 @@ helpful behavior in the \code{case_when()} function from the
 }
 \examples{
 {
-  13 \%btwn\% c(12.5, 15)
+  13 \%btwn\% c(12.5, 15) #returns TRUE
 }
 
 }

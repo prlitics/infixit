@@ -81,15 +81,20 @@ test_that("Operations work in a loop", {
 })
 
 
+test_that("Error catches for subfunctions",{
+  assign('tmp',0, envir = parent.frame())
+  expect_error(.infixit_arith_execute('%%%'), "is not currently supported")
+  expect_error(.infixit_arith('%+=%',deparse(substitute(tmp)),c(1,2)), "same length")
+
+})
+
 test_that("Operations require numeric",{
   
   tmp <- 0
   expect_error(tmp %+=% "pear", "must be of type numeric")
   expect_error(tmp %+=% as.factor("pear"), "must be of type numeric")
-
+  
 })
-
-
 
 
 
