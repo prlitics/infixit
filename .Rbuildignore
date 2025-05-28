@@ -6,3 +6,4 @@
 ^\.covrignore
 ^README\.Rmd$
 ^cran-comments\.md$
+/*.Rcheck/

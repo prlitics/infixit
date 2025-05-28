@@ -4,7 +4,7 @@
 #' between two others, you have to set it up in a
 #' cumbersome manner: `X > Y & X < Z`. `%btwn%` simplifies
 #' the operation into a single call: `X %btwn% c(Y, Z)`.
-#'
+#'@details
 #' By default, `%btwn%` evaluates *inclusively*. That is,
 #' if the right-hand side is `c(1, 5)` and the left-hand
 #' side is `c(1,5)`, it will evaluate as `TRUE TRUE`. If
@@ -15,9 +15,14 @@
 #' or *exclusive* for the upper-bound (")"). To set an
 #' inclusive lower-bound but exclusive upper-bound, for
 #' example, you would do as follows:
-#' `options(infixit.btwn = c("[", ")"))`. This can be
-#' helpful behavior in the `case_when()` function from the
-#' `dplyr` package.
+#' `options(infixit.btwn = c("[", ")"))`. Additional 
+#' options allow you to set which date formats are 
+#' automatically parsed when comparing if one date is within 
+#' another (`infixit.btwn.datetimefmt`), and whether `%btwn%`
+#' will ignore `NA` values in the comparison or return them as
+#' `FALSE` (`infixit.btwn.ignore_na`)
+#' 
+#' 
 #'
 #' @param lhs The left-hand side, the value(s) to be compared.
 #' @param rhs The right-hand side, the comparative range. Must

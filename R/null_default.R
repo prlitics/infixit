@@ -6,6 +6,7 @@
 #' the right-hand side. This is useful for programming
 #' to ensure a function or process returns a non-null
 #' default.
+#' 
 #' @name null-default
 #' @param x The left-hand side, the value(s) to be evaluated
 #' as either NULL or not.
@@ -40,8 +41,9 @@
 #' resolves as `NULL`. However, there may be times when users
 #' want more than just `NULL` values to return the default but,
 #' also, values that are `NA`, `FALSE`, and those that are
-#' length 0 (such as `character(0)` or `integer(0)`). The
-#' expanded default operator covers the following cases:
+#' length 0 (such as `character(0)` or `integer(0)`). 
+#'@details 
+#' The expanded default operator covers the following cases:
 #'
 #' * `NULL`
 #' * An atomic `FALSE`
@@ -123,7 +125,26 @@ if (exists("%||%", envir = baseenv())) {
 
 
 
+#' Tests if a vector is entirely comprised of NAs
+#'
+#' This function tests if a passed object is entirely comprised
+#' of `NA` values.
+#' 
+#' @details
+#' This function is exported in order to provide one of the default
+#' tests for the `%|||%` function and is not really intended for 
+#' use outside of that context.
+#' 
+#' 
+#' @name .is_allNA
+#' @param x The object to test if is entirely comprised of `NA` values
+#'
+#' @return A boolean (`TRUE` or `FALSE`)
 #' @export
+#'
+#' @examples {
+#'   .is_allNA(c(NA,NA,"NA")) # Will return FALSE
+#' }
 .is_allNA <- function(x) {
   if (all(is.na(x)))
     TRUE
@@ -132,6 +153,28 @@ if (exists("%||%", envir = baseenv())) {
   
 }
 
+
+#' Tests if an object is entirely comprised of `FALSE`s
+#'
+#' This function tests if a passed object is entirely comprised
+#' of `FALSE` values.
+#' 
+#' @details
+#' This function is exported in order to provide one of the default
+#' tests for the `%|||%` function and is not really intended for 
+#' use outside of that context.
+#' 
+#' 
+#' @name .is_allFalse
+#' @param x The object to test if is entirely comprised of `FALSE` values
+#'
+#' @return A boolean (`TRUE` or `FALSE`)
+#' @export
+#'
+#' @examples {
+#'   .is_allFalse(c(FALSE,FALSE,TRUE)) # Will return FALSE
+#' }
+#' 
 #' @export
 .is_allFalse <- function(x) {
   if (all(unlist(lapply(x, isFALSE))))
@@ -141,6 +184,26 @@ if (exists("%||%", envir = baseenv())) {
   
 }
 
+#' Tests if an object is of length 0
+#'
+#' This function tests if a passed object is of length 0.
+#' 
+#' @details
+#' This function is exported in order to provide one of the default
+#' tests for the `%|||%` function and is not really intended for 
+#' use outside of that context.
+#' 
+#' 
+#' @name .is_length_zero
+#' @param x The object to test if is length(0)
+#'
+#' @return A boolean (`TRUE` or `FALSE`)
+#' @export
+#'
+#' @examples {
+#'   .is_allFalse(c(FALSE,FALSE,TRUE)) # Will return FALSE
+#' }
+#' 
 #' @export
 .is_length_zero <- function(x) {
   if (!length(x))
