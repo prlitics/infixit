@@ -34,9 +34,12 @@ bound ("("), \emph{inclusive} for the upper-bound ("]"),
 or \emph{exclusive} for the upper-bound (")"). To set an
 inclusive lower-bound but exclusive upper-bound, for
 example, you would do as follows:
-\code{options(infixit.btwn = c("[", ")"))}. This can be
-helpful behavior in the \code{case_when()} function from the
-\code{dplyr} package.
+\code{options(infixit.btwn = c("[", ")"))}. Additional
+options allow you to set which date formats are
+automatically parsed when comparing if one date is within
+another (\code{infixit.btwn.datetimefmt}), and whether \verb{\%btwn\%}
+will ignore \code{NA} values in the comparison or return them as
+\code{FALSE} (\code{infixit.btwn.ignore_na})
 }
 \examples{
 {

@@ -28,6 +28,10 @@ It can be downloaded through the following:
 ``` r
 library(remotes)
 install_github("prlitics/infixit")
+
+# or through cran
+
+install.packages('infixit')
 ```
 
 There are currently 12 infix functions packaged with `{infixit}`:
@@ -90,7 +94,7 @@ a %+% b %+% c
 
 However, it some instances, users might apprciate having a bit of extra
 padding to their strings, such as pasting full sentences together. By
-default `%+%` wraps around `paste0`, but`infixit` has the option for
+default `%+%` wraps around `paste0`, but`{infixit}` has the option for
 users to specify `paste` as the concatenation method, which will add a
 space between pasted objects.
 
@@ -408,9 +412,9 @@ left-hand side variable to check if it evaluates to `NULL` and, if so,
 returns the value of the right-hand side. If not `NULL`, it will return
 the left-hand side value. This can be helpful in programming when
 dealing with operations that only happen situationally (i.e., if certain
-parameters are passed, objects are of a particular class, etc). Infixit
-now includes `%||%`, but defaults to the base function if users are on
-4.4 or greater.
+parameters are passed, objects are of a particular class, etc).
+`{infixit}` now includes `%||%`, but defaults to the base function if
+users are on 4.4 or greater.
 
 ``` r
 val1 <- NULL
@@ -429,9 +433,9 @@ val2 %||% "apple" #returns "banana"
 However, `NULL` are not the only way that programmers may indicate the
 absence of a value. Some may choose to do `NA`, `FALSE`, or an object of
 length 0. (The latter is can happen often, for example, when comparing
-sets of values to each other using set operations). To that end, infixit
-also introduces an *extended* default operator `%|||%` which checks for
-a larger array of possible “empty” values.
+sets of values to each other using set operations). To that end,
+`{infixit}` also introduces an *extended* default operator `%|||%` which
+checks for a larger array of possible “empty” values.
 
 ``` r
 NULL %|||% "apple" #Null
@@ -477,7 +481,7 @@ character(0) %|||% "appple" #An object of length zero
 
 Under the hood, `%|||%` is running a series of tests based upon function
 names. Some of these are provided by base R, others are provided by
-infixit. You can extend these tests based upon your own needs though
+`{infixit}`. You can extend these tests based upon your own needs though
 `options("infixit.extended_default_tests")`
 
 ``` r
@@ -515,8 +519,7 @@ are all implemented in base R (and, really, in any sane programming
 language). However, there are particular combinations of these elements
 that are particularly prominent and useful. Chief among these are NAND
 (Not AND) and XOR (eXclusive OR). Not AND, as its name implies, returns
-the inverse of AND. Infixit supplies`%nand%` for this purpose as an
-alias.
+the inverse of AND. `{infixit}` supplies`%nand%` for this purpose.
 
 ``` r
 TRUE %nand% TRUE

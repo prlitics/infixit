@@ -24,10 +24,10 @@ defined by the right-hand object, if the left-hand value
 resolves as \code{NULL}. However, there may be times when users
 want more than just \code{NULL} values to return the default but,
 also, values that are \code{NA}, \code{FALSE}, and those that are
-length 0 (such as \code{character(0)} or \code{integer(0)}). The
-expanded default operator covers the following cases:
+length 0 (such as \code{character(0)} or \code{integer(0)}).
 }
 \details{
+The expanded default operator covers the following cases:
 \itemize{
 \item \code{NULL}
 \item An atomic \code{FALSE}

@@ -5,7 +5,8 @@
 #' side. In effect, it is a cleaner, parsimonious way of
 #' articulating `!(lhs %in% rhs)`. See the help
 #' for `match` for additional documentation on matching.
-#'
+#' 
+#'@details
 #' Following the convention of `%in%`, which is actually
 #' a call to `match`, `%nin%` is defined as:
 #' `match(lhs, rhs, nomatch = 0) == 0`. (In the case of

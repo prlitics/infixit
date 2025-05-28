@@ -2,8 +2,11 @@
 #'
 #' Many programming languages utilize `+` as a means of
 #' concatenating strings. In standard R, however, `+` will
-#' return an error when used with strings. `%+%` ports this
-#' capability over. By default, it uses `paste0` under the
+#' return an error when used with strings. `%+%` provides
+#' this ability for parsimonious string concatenation. 
+#' 
+#' @details
+#' By default, it uses `paste0` under the
 #' hood, but this can be shifted to `paste` by running
 #' `options(infixit.paste = "paste0")`. By default (as with
 #' `paste`), this will have the seperator be a single space 
